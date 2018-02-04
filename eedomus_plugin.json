@@ -1,0 +1,103 @@
+{
+    "plugin_id": "sialorsinon",
+    "name_fr": "Si Alors Sinon",
+    "icon": "sialorssinon.png",
+    "version": "1.0",
+    "creation_date": "2017-12-15",
+    "modification_date": "2017-12-15",
+    "author": "Influman",
+    "description_fr": "<b>Génération de règles SI ALORS SINON.</b><br>Au changement de valeur d'un périphérique (SI), définissez l'action attendue en fonction d'une valeur (ALORS), <br>et l'action attendue pour toutes les autres valeurs (SINON)<br><b>Limité aux périphériques à valeur 0-100 (Off/On)</b>",
+    "description_en": "",
+    "forum_link": "",
+    "parameters":
+        [
+			{
+                "parameter": "NAME1", 
+                "description": "Nom de la règle : ",
+                "xtype": "textfield",
+                "field": "allowBlank: false, maxLength:20, minLength:1, width: 150"
+            },      
+			{
+			"parameter": "line1",
+			"description": "SI",
+			"xtype": "displayfield",
+			"field": "style: 'padding: 3px;', value: '.................'"
+			},					
+  		   {
+                "parameter": "SI", 
+                "description": "le périphérique  : ",
+                "xtype": "combo",
+				"field": "store : getCombo('/json/list_all.php?value_type=list&has_value=0,100'), displayField: 'label', valueField: 'id', typeAhead: true, forceSelection: true, triggerAction: 'all', selectOnFocus: true, editable: false, shadow:true, mode: 'local', width: 250, listWidth: 300, allowBlank: false"
+			},
+			{
+                "parameter": "VALSI", 
+                "description": "prend la valeur :",
+                "xtype": "combo",
+                "default_value": 0,
+                "field": "width:110, allowBlank:false, store:[[0, '0-Off'], [100, '100-On']], editable: false, shadow: true, triggerAction: 'all', typeAhead:true"
+            },
+			{
+			"parameter": "line2",
+			"description": "ALORS",
+			"xtype": "displayfield",
+			"field": "style: 'padding: 3px;', value: '.................'"
+			},		
+            {
+                "parameter": "ALORS", 
+                "description": "positionner le périphérique : ",
+                "xtype": "combo",
+				"field": "store : getCombo('/json/list_all.php?value_type=list&has_value=0,100'), displayField: 'label', valueField: 'id', typeAhead: true, forceSelection: true, triggerAction: 'all', selectOnFocus: true, editable: false, shadow:true, mode: 'local', width: 250, listWidth: 300, allowBlank: false"
+			},
+			{
+                "parameter": "VALALORS", 
+                "description": "à la valeur : ",
+                "xtype": "combo",
+                "default_value": 0,
+                "field": "width:110, allowBlank:false, store:[[0, '0-Off'], [100, '100-On']], editable: false, shadow: true, triggerAction: 'all', typeAhead:true"
+            },
+			{
+			"parameter": "line3",
+			"description": "SINON",
+			"xtype": "displayfield",
+			"field": "style: 'padding: 3px;', value: '.................'"
+			},
+			{
+                "parameter": "SINON", 
+                "description": "positionner le périphérique : ",
+                "xtype": "combo",
+				"field": "store : getCombo('/json/list_all.php?value_type=list&has_value=0,100'), displayField: 'label', valueField: 'id', typeAhead: true, forceSelection: true, triggerAction: 'all', selectOnFocus: true, editable: false, shadow:true, mode: 'local', width: 250, listWidth: 300, allowBlank: false"
+			},
+			{
+                "parameter": "VALSINON", 
+                "description": "à la valeur : ",
+                "xtype": "combo",
+                "default_value": 0,
+                "field": "width:110, allowBlank:false, store:[[0, '0-Off'], [100, '100-On']], editable: false, shadow: true, triggerAction: 'all', typeAhead:true"
+            }
+        ],
+   	
+	"rules": [
+      {
+        "name_fr": "plugin.parameters.NAME1 - SI..ALORS",
+        "criterias":
+        [
+          { "device_id": "plugin.parameters.SI", "type": "d", "criteria": "==", "target": "plugin.parameters.VALSI"  }
+		],
+        "actions":
+        [
+          { "device_id": "plugin.parameters.ALORS", "type": "direct", "action": "plugin.parameters.VALALORS"}
+        ]
+      },
+	  {
+        "name_fr": "plugin.parameters.NAME1 - SINON",
+        "criterias":
+        [
+          { "device_id": "plugin.parameters.SI", "type": "d", "criteria": "!=", "target": "plugin.parameters.VALSI" }
+        ],
+        "actions":
+        [
+          { "device_id": "plugin.parameters.SINON", "type": "direct", "action": "plugin.parameters.VALSINON"}
+        ]
+      }
+    ]
+}
